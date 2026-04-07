@@ -15,9 +15,14 @@ const app = {};
 
 // testing file system
 // @TODO = pore muche dibo
-data.create("test", "newFile", { name: "BD", Lan: "Bangla" }, (err) => {
-  console.log("Error was", err);
-});
+
+// data.create("test", "newFile", { name: "BD", Lan: "Bangla" }, (err) => {
+//   console.log("Error was", err);
+// });
+
+// data.read("test", "newFile", (err, data) => {
+//   console.log(err, data);
+// });
 
 // configuration
 // app = {};
