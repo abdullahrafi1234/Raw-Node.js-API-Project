@@ -24,6 +24,14 @@ const app = {};
 //   console.log(err, data);
 // });
 
+// data.update("test", "newFile", { name: "England", Lang: "Eng" }, (err) => {
+//   console.log(err);
+// });
+
+data.delete("test", "newFile", (err) => {
+  console.log(err);
+});
+
 // configuration
 // app = {};
 
