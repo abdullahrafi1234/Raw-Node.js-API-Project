@@ -29,7 +29,7 @@ handler._token = {};
 
 //
 handler._token.post = (requestProperties, callback) => {
-  const phone =
+  const id =
     typeof requestProperties.body.phone === "string" &&
     requestProperties.body.phone.trim().length === 11
       ? requestProperties.body.phone
@@ -123,7 +123,7 @@ handler._token.put = (requestProperties, callback) => {
     data.read("tokens", id, (err, tokenData) => {
       let tokenObject = parseJSON(tokenData);
       if (tokenObject.expires > Date.now()) {
-        tokenObject.expires = Date.now() * 60 * 60 * 1000;
+        tokenObject.expires = Date.now() + 60 * 60 * 1000;
 
         // store the updated token
         data.update("tokens", id, tokenObject, (err) => {
@@ -149,6 +149,40 @@ handler._token.put = (requestProperties, callback) => {
 };
 
 // Authentication
-handler._token.delete = (requestProperties, callback) => {};
+handler._token.delete = (requestProperties, callback) => {
+  // check the id  is valid
+  const id =
+    typeof requestProperties.queryStringObject.id === "string" &&
+    requestProperties.queryStringObject.id.trim().length === 20
+      ? requestProperties.queryStringObject.id
+      : false;
+
+  if (id) {
+    // lookup user
+    data.read("tokens", id, (err, tokenData) => {
+      if (!err && tokenData) {
+        data.delete("tokens", id, (err) => {
+          if (!err) {
+            callback(200, {
+              message: "Token Deleted successfully",
+            });
+          } else {
+            callback(500, {
+              error: "There was a problem on server side delete",
+            });
+          }
+        });
+      } else {
+        callback(500, {
+          error: "There was a server side error",
+        });
+      }
+    });
+  } else {
+    callback(400, {
+      error: "There was a problem in your request",
+    });
+  }
+};
 
 module.exports = handler;
