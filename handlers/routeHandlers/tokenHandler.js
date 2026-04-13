@@ -29,7 +29,7 @@ handler._token = {};
 
 //
 handler._token.post = (requestProperties, callback) => {
-  const id =
+  const phone =
     typeof requestProperties.body.phone === "string" &&
     requestProperties.body.phone.trim().length === 11
       ? requestProperties.body.phone
@@ -183,6 +183,22 @@ handler._token.delete = (requestProperties, callback) => {
       error: "There was a problem in your request",
     });
   }
+};
+
+// verify token
+handler._token.verify = (id, phone, callback) => {
+  data.read("tokens", id, (err, tokenData) => {
+    if (!err && tokenData) {
+      if (
+        parseJSON(tokenData).phone === phone &&
+        parseJSON(tokenData).expires > Date.now()
+      ) {
+        callback(true);
+      }
+    } else {
+      callback(false);
+    }
+  });
 };
 
 module.exports = handler;
