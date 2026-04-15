@@ -303,6 +303,187 @@ handler._check.put = (requestProperties, callback) => {
 };
 
 // Authentication
-handler._check.delete = (requestProperties, callback) => {};
+// handler._check.delete = (requestProperties, callback) => {
+//   // check the id  is valid
+//   const id =
+//     typeof requestProperties.queryStringObject.id === "string" &&
+//     requestProperties.queryStringObject.id.trim().length === 20
+//       ? requestProperties.queryStringObject.id
+//       : false;
+
+//   if (id) {
+//     //lookup the check
+//     data.read("checks", id, (err, checkData) => {
+//       if (!err && checkData) {
+//         //verify token
+//         const token =
+//           typeof requestProperties.headersObject.token === "string"
+//             ? requestProperties.headersObject.token
+//             : false;
+
+//         tokenHandler._token.verify(
+//           token,
+//           parseJSON(checkData).userPhone,
+//           (tokenIsValid) => {
+//             if (tokenIsValid) {
+//               // delete the check data
+//               data.delete("checks", id, (err) => {
+//                 if (!err) {
+//                   // Already delete on check file then
+//                   // delete the users check er jonno users e dukte hbe
+//                   data.read(
+//                     "users",
+//                     parseJSON(checkData).userPhone,
+//                     (err, userData) => {
+//                       let userObject = parseJSON(userData);
+//                       if (!err && userData) {
+//                         let userChecks =
+//                           typeof userObject.checks === "object" &&
+//                           userObject.checks instanceof Array
+//                             ? userObject.checks
+//                             : [];
+
+//                         // remove the deleted check id from the user list checks
+//                         let checkPosition = userChecks.indexOf(id);
+
+//                         if (checkPosition > -1) {
+//                           userChecks.splice(checkPosition, 1);
+
+//                           // remove the user data
+//                           userObject.checks = userChecks;
+//                           data.update(
+//                             "users",
+//                             userObject.phone,
+//                             userObject,
+//                             (err) => {
+//                               if (!err) {
+//                                 callback(200, {
+//                                   message: "Check deleted successfully",
+//                                 });
+//                               } else {
+//                                 callback(500, {
+//                                   error:
+//                                     "The check id that you are trying to remove is not found in user",
+//                                 });
+//                               }
+//                             },
+//                           );
+//                         }
+//                       } else {
+//                         callback(500, {
+//                           error: "There was a server side problem",
+//                         });
+//                       }
+//                     },
+//                   );
+//                 } else {
+//                   callback(500, {
+//                     error: "There was a server side problem",
+//                   });
+//                 }
+//               });
+//             } else {
+//               callback(403, {
+//                 error: "Authentication error",
+//               });
+//             }
+//           },
+//         );
+//       } else {
+//         callback(500, {
+//           error: "You have a problem in your request",
+//         });
+//       }
+//     });
+//   } else {
+//     callback(400, {
+//       error: "You have a problem in your request",
+//     });
+//   }
+// };
+
+handler._check.delete = (requestProperties, callback) => {
+  const id =
+    typeof requestProperties.queryStringObject.id === "string" &&
+    requestProperties.queryStringObject.id.trim().length === 20
+      ? requestProperties.queryStringObject.id
+      : false;
+
+  if (id) {
+    data.read("checks", id, (err, checkData) => {
+      if (!err && checkData) {
+        const token =
+          typeof requestProperties.headersObject.token === "string"
+            ? requestProperties.headersObject.token
+            : false;
+
+        const checkObject = parseJSON(checkData);
+
+        tokenHandler._token.verify(
+          token,
+          checkObject.userPhone,
+          (tokenIsValid) => {
+            if (tokenIsValid) {
+              data.delete("checks", id, (err) => {
+                if (!err) {
+                  data.read("users", checkObject.userPhone, (err, userData) => {
+                    if (!err && userData) {
+                      let userObject = parseJSON(userData);
+                      let userChecks =
+                        typeof userObject.checks === "object" &&
+                        userObject.checks instanceof Array
+                          ? userObject.checks
+                          : [];
+
+                      let checkPosition = userChecks.indexOf(id);
+
+                      if (checkPosition > -1) {
+                        userChecks.splice(checkPosition, 1);
+                        userObject.checks = userChecks;
+
+                        data.update(
+                          "users",
+                          userObject.phone,
+                          userObject,
+                          (err) => {
+                            if (!err) {
+                              callback(200, {
+                                message: "Check deleted successfully",
+                              });
+                            } else {
+                              callback(500, {
+                                error: "Could not update the user",
+                              });
+                            }
+                          },
+                        );
+                      } else {
+                        // EXACT LINE FIX 1
+                        callback(500, {
+                          error: "Check ID not found in user's list",
+                        });
+                      }
+                    } else {
+                      // EXACT LINE FIX 2
+                      callback(500, { error: "User not found" });
+                    }
+                  });
+                } else {
+                  callback(500, { error: "Could not delete the check file" });
+                }
+              });
+            } else {
+              callback(403, { error: "Authentication error" });
+            }
+          },
+        );
+      } else {
+        callback(404, { error: "Check ID not found" });
+      }
+    });
+  } else {
+    callback(400, { error: "Invalid ID in request" });
+  }
+};
 
 module.exports = handler;

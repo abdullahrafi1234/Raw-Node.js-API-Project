@@ -1,1 +1,8 @@
-{"firstName":"Abdullah","lastName":"Rafi","phone":"01234567890","password":"0f33fa35df1b99d63d44cf39f6f5c9972adfa0a09a9798fadc4d14e072229f5e","tosAgreement":"true","checks":["wnykcook71hvjw87512r","ept699c1i4m4ccfaclre"]}
+{
+  "firstName": "Abdullah",
+  "lastName": "Rafi",
+  "phone": "01234567890",
+  "password": "0f33fa35df1b99d63d44cf39f6f5c9972adfa0a09a9798fadc4d14e072229f5e",
+  "tosAgreement": "true",
+  "checks": []
+}
