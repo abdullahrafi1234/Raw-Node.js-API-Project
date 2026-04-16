@@ -9,11 +9,13 @@ const http = require("http");
 const { handleReqRes } = require("./helpers/handleReqRes");
 const environment = require("./helpers/environments");
 const data = require("./lib/data");
+const { sendTwilioSms } = require("./helpers/notifications");
 
 // app object - module scaffolding
 const app = {};
 
 // testing file system
+
 // @TODO = pore muche dibo
 
 // data.create("test", "newFile", { name: "BD", Lan: "Bangla" }, (err) => {
@@ -34,6 +36,11 @@ const app = {};
 
 // configuration
 // app = {};
+
+// check twilio
+sendTwilioSms("01722438145", "Hello World", (err) => {
+  console.log(`this is the error, ${err}`);
+});
 
 //create server
 app.createServer = () => {
