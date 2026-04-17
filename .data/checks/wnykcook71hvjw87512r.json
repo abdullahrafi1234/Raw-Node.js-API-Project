@@ -1,1 +1,1 @@
-{"id":"wnykcook71hvjw87512r","userPhone":"01234567890","protocol":"http","url":"google.com","method":"get","successCodes":[200,201],"timeoutSeconds":3}
+{"id":"wnykcook71hvjw87512r","userPhone":"01234567890","protocol":"http","url":"google.com","method":"get","successCodes":[200,201],"timeoutSeconds":3,"state":"down","lastChecked":1776461089092}

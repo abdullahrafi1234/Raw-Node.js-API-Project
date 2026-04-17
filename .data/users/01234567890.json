@@ -1,8 +1,1 @@
-{
-  "firstName": "Abdullah",
-  "lastName": "Rafi",
-  "phone": "01234567890",
-  "password": "0f33fa35df1b99d63d44cf39f6f5c9972adfa0a09a9798fadc4d14e072229f5e",
-  "tosAgreement": "true",
-  "checks": []
-}
+{"firstName":"Abdullah","lastName":"Rafi","phone":"01234567890","password":"0f33fa35df1b99d63d44cf39f6f5c9972adfa0a09a9798fadc4d14e072229f5e","tosAgreement":"true","checks":["12v7j41j2pk5ng9nn5cx","6h6lcjet6y4xkkp8h8du"]}
