@@ -456,7 +456,3 @@ Value: your_token_id_here
 ## 📄 License
 
 This project is **UNLICENSED** — built for learning purposes.
-
----
-
-> Built with Pure Node.js — no frameworks, just fundamentals. 🚀
